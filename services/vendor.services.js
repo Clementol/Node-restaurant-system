@@ -1,35 +1,30 @@
-import { updateUser } from "../controllers/user.controllers";
-import AuthHelper from "../helpers/auth.helper";
-import Vendor from "../models/vendor";
+// import { updateUser } from "../controllers/user.controllers";
+// import AuthHelper from "../helpers/auth.helper";
+const {Vendor} = require("../models");
 
-class VendorServices {
-  constructor() {}
+/**
+ * @description Create Vendor
+ * @param {*} data
+ */
+//
+const CreateVendor = (data) => {
+  return new Promise((resolve, reject) => {
+    Vendor.create(data)
+      .then((user) => resolve(user))
+      .catch((error) => reject(error));
+  });
+};
 
-  /**
-   * @description Create Vendor
-   * @param {*} data
-   */
-  //
-  CreateVendor(data) {
-    return new Promise((resolve, reject) => {
-      Vendor.create(data)
-        .then((user) => resolve(user))
-        .catch((error) => reject(error));
-    });
-  }
-
-  UpdateVendor(vendorId, data) {
-      return new Promise((resolve, reject) => {
-          Vendor.update(data, 
-            {where: {vendorId: vendorId}})
-            .then(vendor => {
-                resolve(vendor)
-            })
-            .catch(error => {
-                reject(error)
-            })
+const UpdateVendor = (vendorId, data) => {
+  return new Promise((resolve, reject) => {
+    Vendor.update(data, { where: { vendorId: vendorId } })
+      .then((vendor) => {
+        resolve(vendor);
       })
-  }
-}
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 
-export default new VendorServices();
+module.exports = { CreateVendor, UpdateVendor };

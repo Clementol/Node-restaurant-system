@@ -1,54 +1,49 @@
-import Food from "../models/food";
-import Menu_Foods from "../models/menu_foods";
+const {Food} = require("../models");
 
-class FoodServices {
-  constructor() {}
+// MenuFoodAssociation(menuData) {
+//   return new Promise(async (resolve, reject) => {
+//     await Menu_Foods.create(menuData)
+//       .then(() => {
+//         resolve();
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   });
+// }
+/**
+ * @description Create Food
+ * @param {*} data
+ * @returns food, error
+ */
 
-  MenuFoodAssociation(menuData) {
-    return new Promise(async (resolve, reject) => {
-      await Menu_Foods.create(menuData)
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-  /**
-   * @description Create Food
-   * @param {*} data
-   * @returns food, error
-   */
+const CreateFood = (data) => {
+  return new Promise((resolve, reject) => {
+    Food.create(data)
 
-  CreateFood(data) {
-    return new Promise((resolve, reject) => {
-      Food.create(data)
+      // this.menuFoodAssociation(food.menuId)
+      .then((food) => {
+        resolve(food);
+      })
+      .catch((error) => reject(error));
+  });
+};
 
-        // this.menuFoodAssociation(food.menuId)
-        .then((food) => {
-          resolve(food);
-        })
-        .catch((error) => reject(error));
-    });
-  }
+/**
+ *
+ * @param {*} foodId
+ * @param {*} data
+ */
+const UpdateFood = (foodId, data) => {
+  return new Promise((resolve, reject) => {
+    Food.update(data, { where: { foodId: foodId } })
+      .then((food) => {
+        resolve(food);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 
-  /**
-   *
-   * @param {*} foodId
-   * @param {*} data
-   */
-  UpdateFood(foodId, data) {
-    return new Promise((resolve, reject) => {
-      Food.update(data, { where: { foodId: foodId } })
-        .then((food) => {
-          resolve(food);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-}
-
-export default new FoodServices();
+module.exports = { CreateFood, UpdateFood };

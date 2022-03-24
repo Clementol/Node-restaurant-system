@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+const {Sequelize} = require("sequelize");
 
 const {
   MYSQL_HOST: MYSQL_HOST,
@@ -20,4 +20,5 @@ const sequelize = new Sequelize(DB, USER, PASSWORD, {
   // },
 });
 
-export default sequelize;
+
+module.exports = sequelize

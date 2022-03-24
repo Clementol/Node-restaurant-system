@@ -1,43 +1,42 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Menus', {
-      menuId: {
+    await queryInterface.createTable("Food", {
+      foodId: {
         type: Sequelize.STRING,
         allowNull: false,
         primaryKey: true,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
-      startDate: {
-        type: Sequelize.DATE,
-        allowNull: true,
+      price: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
       },
-      endDate: {
-        type: Sequelize.DATE,
-        allowNull: true,
+      image: {
+        type: Sequelize.STRING,
       },
-      vendorId :{
+      menuId: {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
-          model: "Vendors",
-          key: "vendorId",
-        }
+          model: "Menus",
+          key: "menuId",
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
-    })
+        type: Sequelize.DATE,
+      },
+    });
   },
   async down(queryInterface, Sequelize) {
-    // await queryInterface.dropTable('Menus');
-  }
+    await queryInterface.dropTable("Food");
+  },
 };

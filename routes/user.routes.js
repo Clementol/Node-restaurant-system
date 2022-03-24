@@ -1,7 +1,11 @@
-import { Router } from "express";
-import { login, signUp, updateUser } from "../controllers/user.controllers";
-import middleware from "../middleware/authentication";
-import upload from "../middleware/multer";
+const { Router } = require("express");
+const {
+  login,
+  signUp,
+  updateUser,
+} = require("../controllers/user.controllers");
+const middleware = require("../middleware/authentication");
+const upload = require("../middleware/multer");
 
 const userRouter = Router();
 
@@ -14,4 +18,4 @@ userRouter.put(
   updateUser
 );
 
-export { userRouter };
+module.exports = userRouter;

@@ -1,8 +1,8 @@
-import multer from "multer";
-import shortid from "shortid";
-import aws from "aws-sdk";
-import multerS3 from "multer-s3";
-import { config } from "../config";
+const multer = require("multer");
+const shortid = require("shortid");
+const aws = require("aws-sdk");
+const multerS3 = require("multer-s3");
+const config = require("../config");
 
 let s3 = new aws.S3({
   region: "eu-west-2",
@@ -22,4 +22,4 @@ const upload = multer({
   }),
 });
 
-export default upload;
+module.exports = upload;

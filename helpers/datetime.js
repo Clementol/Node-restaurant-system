@@ -4,4 +4,4 @@ const dateTimeFormat = () => {
     return datatime
 }
 
-export {dateTimeFormat}
+module.exports = {dateTimeFormat}

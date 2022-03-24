@@ -1,67 +1,58 @@
-import {Op, where} from "sequelize";
-import Food from "../models/food";
-import Menu from "../models/menus";
-import os from "os";
-import Menu_Foods from "../models/menu_foods";
+const {Food, Menu} = require("../models")
 
-class MenuServices {
-  constructor() {}
 
-  /**
-   * @description Create menu
-   * @param {*} data
-   * @returns menu, error
-   */
+/**
+ * @description Create menu
+ * @param {*} data
+ * @returns menu, error
+ */
+const CreateMenu = (data) => {
+  return new Promise((resolve, reject) => {
+    Menu.create(data)
+      .then((menu) => resolve(menu))
+      .catch((error) => reject(error));
+  });
+};
 
-  CreteMenu(data) {
-    return new Promise((resolve, reject) => {
-      Menu.create(data)
-        .then((menu) => resolve(menu))
-        .catch((error) => reject(error));
-    });
-  }
+/**
+ *
+ * @param {*} menuId
+ * @param {*} data
+ * @returns menu, error
+ */
+const UpdateMenu = (menuId, data) => {
+  return new Promise((resolve, reject) => {
+    Menu.update(data, { where: { menuId: menuId } })
+      .then((menu) => resolve(menu))
+      .catch((error) => reject(error));
+  });
+};
 
-  /**
-   * 
-   * @param {*} menuId 
-   * @param {*} data 
-   * @returns menu, error
-   */
-  UpdateMenu(menuId, data) {
-    return new Promise((resolve, reject) => {
-      Menu.update(data, {where: {menuId: menuId}})
-      .then(menu => resolve(menu))
-      .catch(error => reject(error))
+/**
+ * @description Get Menus With Foods
+ * @param {*} vendorId
+ * @returns
+ */
+const GetMenusWithFoods = (vendorId) => {
+  return new Promise((resolve, reject) => {
+    Menu.findAll({
+      where: { vendorId: vendorId },
+      include: [{ model: Food, as: "foods" }],
+      // include: [
+      //   {model: Food, as: "foods",
+      //       where: {menuId: {[Op.eq]: "food.menuId"} },
+      //   // through: Menu_Foods
+      //   },
+      // ],
     })
-  }
+      .then((menu) => {
+        resolve(menu);
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
 
-  /**
-   * @description Get Menus With Foods
-   * @param {*} vendorId 
-   * @returns 
-   */
-  GetMenusWithFoods(vendorId) {
-    return new Promise((resolve, reject) => {
-      
-        Menu.findAll({
-          include: [{model: Food, as: "foods"}]
-          // include: [
-          //   {model: Food, as: "foods",
-          //       where: {menuId: {[Op.eq]: "food.menuId"} },
-          //   // through: Menu_Foods
-          //   },
-          // ],
-        })
-        .then(menu => {
-         
-          resolve(menu)
-        })
-        .catch(error => {
-          console.log(error)
-          reject(error)
-        })
-    })
-  }
-}
-
-export default new MenuServices();
+module.exports = {CreateMenu, UpdateMenu, GetMenusWithFoods}

@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import FoodServices from "../services/food.services";
+const { ObjectId } = require("mongodb");
+const FoodServices = require("../services/food.services");
 
 const createFood = (req, res) => {
   try {
@@ -17,16 +17,7 @@ const createFood = (req, res) => {
 
     FoodServices.CreateFood(data)
       .then((food) => {
-        let menuData = {}
-        menuData.menuId = food.menuId
-        menuData.foodId = food.foodId
-        FoodServices.MenuFoodAssociation(menuData)
-        .then(() => {
-          return res.status(201).json({ food });
-        })
-        .catch(error => {
-          return res.status(400).json({error})
-        })
+        return res.status(201).json({food})
       })
       .catch((error) => {
         const msg = `Unable to add food ${error}`;
@@ -82,4 +73,4 @@ const updateFood = (req, res) => {
 };
 
 
-export { createFood, updateFood };
+module.exports = { createFood, updateFood };

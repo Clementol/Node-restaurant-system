@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import VendorServices from "../services/vendor.services";
+const { ObjectId } = require("mongodb");
+const VendorServices = require("../services/vendor.services");
 
 const createVendor = (req, res) => {
   try {
@@ -101,4 +101,4 @@ const updateVendor = (req, res) => {
   }
 };
 
-export { createVendor, updateVendor };
+module.exports = { createVendor, updateVendor };

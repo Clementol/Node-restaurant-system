@@ -1,16 +1,13 @@
-import express from "express";
-import compression from "compression";
-import cors from "cors";
-import multer from "multer";
-import morgan from "morgan";
-import "dotenv/config";
+const express = require("express");
+const compression = require("compression");
+const cors = require("cors");
+const multer = require("multer");
+const morgan = require("morgan");
+require("dotenv").config();
 
-import db from "./db";
-import routes from "./routes";
+const db = require("./db");
 
 const app = express();
-const upload = multer()
-// const router = Router();
 
 const PORT = process.env.PORT || 5000;
 
@@ -19,8 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 app.use(morgan("combined"));
 app.use(cors());
-// app.use(upload.array())
-routes(app)
+
+require("./routes")(app)
 
 app.listen(PORT, () => {
   console.info(`Server running on port ${PORT}`);

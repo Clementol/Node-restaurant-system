@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import MenuServices from "../services/menu.services";
+const { ObjectId } = require("mongodb");
+const MenuServices = require("../services/menu.services");
 
 const createMenu = (req, res) => {
 
@@ -19,8 +19,8 @@ const createMenu = (req, res) => {
       data.endDate = endDate
     }
     data.vendorId = vendorId
-
-    MenuServices.CreteMenu(data)
+    
+    MenuServices.CreateMenu(data)
     .then(menu => {
         return res.status(200).json({ menu });
     })
@@ -89,4 +89,4 @@ const getMenusWithFoods = (req, res) => {
   }
 }
 
-export { createMenu, updateMenu, getMenusWithFoods };
+module.exports = { createMenu, updateMenu, getMenusWithFoods };

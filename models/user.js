@@ -1,9 +1,19 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../db";
-
-const user = sequelize.define(
-  "Users",
-  {
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class User extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  }
+  User.init({
     userId: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -13,8 +23,8 @@ const user = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true
-      }
+        isAlpha: true,
+      },
     },
     lastName: {
       type: DataTypes.STRING,
@@ -28,8 +38,8 @@ const user = sequelize.define(
       unique: true,
       validate: {
         isEmail: {
-          msg: "enter valid email"
-        }
+          msg: "enter valid email",
+        },
       },
     },
     password: {
@@ -40,8 +50,8 @@ const user = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isNumeric: true
-      }
+        isNumeric: true,
+      },
     },
     token: {
       type: DataTypes.STRING,
@@ -51,8 +61,10 @@ const user = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-  },
-  { timestamps: true }
-);
-
-export default user;
+  }, {
+    timestamps: true,
+    sequelize,
+    modelName: 'User',
+  });
+  return User;
+};

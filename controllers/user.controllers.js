@@ -1,7 +1,8 @@
-import { ObjectId } from "mongodb";
-import AuthHelper from "../helpers/auth.helper";
+const { ObjectId } = require("mongodb");
+const AuthHelper = require("../helpers/auth.helper");
+const { userDetails } = require("../helpers/user");
 
-import UserServices from "../services/user.services";
+const UserServices = require("../services/user.services");
 
 const signUp = (req, res) => {
   try {
@@ -48,11 +49,11 @@ const signUp = (req, res) => {
   }
 };
 
-const login = (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    UserServices.checkUser(email).then((user) => {
+    await UserServices.checkUser(email).then((user) => {
       if (!user) {
         return res.status(400).json({ error: "User doesn't exist" });
       } else if (user) {
@@ -70,7 +71,10 @@ const login = (req, res) => {
               data.token = token;
               data.refreshToken = refreshToken;
               AuthHelper.updateToken(user.userId, data).then(() => {
-                return res.status(200).json({ user });
+                const rUser = user.toJSON() 
+                delete rUser.password
+                delete rUser.refreshToken
+                return res.status(200).json({ user: rUser});
               })
               .catch(error => {
                 const msg =  `Unable to update user credentials ${error}`
@@ -126,4 +130,4 @@ const updateUser = (req, res) => {
   }
 };
 
-export { signUp, login, updateUser };
+module.exports = { signUp, login, updateUser };
