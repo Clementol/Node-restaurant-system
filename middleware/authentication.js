@@ -2,6 +2,10 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 
 const requireSignIn = async (req, res, next) => {
+  if (req.headers["authorization"] == null) {
+    res.status(401).json({ error: "Could not start Authentication" });
+    return;
+  }
   const token = req.headers["authorization"].split(" ")[1];
 
   if (!token) {

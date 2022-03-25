@@ -1,5 +1,6 @@
+const {Sequelize, Op} = require("sequelize")
 const AuthHelper = require("../helpers/auth.helper");
-const {User} = require("../models");
+const {User, Order, Food, Order_Items, Vendor} = require("../models");
 
 /**
  *
@@ -8,8 +9,8 @@ const {User} = require("../models");
  */
 
 const checkUser = (email) => {
-  return new Promise(async(resolve, reject) => {
-    await User.find({ where: { email: email }
+  return new Promise((resolve, reject) => {
+    User.findOne({ where: { email: email }
     }).then((userExist) => {
       if (userExist) {
         resolve(userExist);
@@ -85,4 +86,28 @@ const updateUser = (userId, data) => {
   });
 };
 
-module.exports = { checkUser, checkPhoneNo, SignUp, updateUser };
+/**
+ * 
+ * @param {*} userId 
+ * @description Get user orders 
+ */
+
+const getUserOrders = (userId) => {
+  const attr = ["userId", "firstName", "lastName"]
+  return new Promise((resolve, reject) => {
+    Order.findAll({where: {userId: userId}, 
+      include: [
+        {model: Vendor, as: "vendor"},
+        {model: Order_Items, as: "orderItems",
+          include: [{model: Food, as: "food"}]
+        },
+      ], 
+      // attributes: [Sequelize.fn("COUNT", Sequelize.col("orderId", "count"))]
+  
+    })
+    .then((user) => resolve(user))
+    .catch(error => reject(error))
+  })
+}
+
+module.exports = { checkUser, checkPhoneNo, SignUp, updateUser, getUserOrders };

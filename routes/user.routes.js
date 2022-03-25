@@ -3,6 +3,7 @@ const {
   login,
   signUp,
   updateUser,
+  getUserOrders
 } = require("../controllers/user.controllers");
 const middleware = require("../middleware/authentication");
 const upload = require("../middleware/multer");
@@ -17,5 +18,6 @@ userRouter.put(
   upload.single("avatar"),
   updateUser
 );
+userRouter.get("/orders", middleware.requireSignIn, getUserOrders)
 
 module.exports = userRouter;

@@ -2,14 +2,19 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Order_Items', {
+      orderItemId: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        primaryKey: true,
+      },
       orderId: {
         allowNull: false,
-        primaryKey: true,
         type: Sequelize.STRING,
         references: {
           model: "Orders",
           key: "orderId"
         }
+
       },
       quantity: {
         type: Sequelize.INTEGER,
@@ -38,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Order_Items');
+    // await queryInterface.dropTable('Order_Items');
   }
 };

@@ -2,10 +2,16 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Orders', {
+      // id: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   primaryKey: true,
+      //   autoIncrement: true,
+      // },
       orderId: {
         allowNull: false,
-        primaryKey: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        primaryKey: true
       },
       userId: {
         type: Sequelize.STRING,
@@ -30,14 +36,17 @@ module.exports = {
       paymentStatus: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "PENDING"
       },
       paymentMethod: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: ""
       },
       orderStatus: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "ORDERED"
       },
       createdAt: {
         allowNull: false,
@@ -51,5 +60,11 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Orders');
+    // await queryInterface.addColumn("Orders", "id", {
+    //   type: Sequelize.INTEGER,
+    //     autoIncrement: true,
+    // })
+
+   
   }
 };

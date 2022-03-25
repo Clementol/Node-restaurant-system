@@ -1,6 +1,5 @@
 const { ObjectId } = require("mongodb");
 const AuthHelper = require("../helpers/auth.helper");
-const { userDetails } = require("../helpers/user");
 
 const UserServices = require("../services/user.services");
 
@@ -125,9 +124,26 @@ const updateUser = (req, res) => {
         return res.status(400).json({ error: msg });
       });
   } catch (error) {
-    const msg = `Error loging in ${error}`;
+    const msg = `Error updating user ${error}`;
     return res.status(400).json({ error: msg });
   }
 };
 
-module.exports = { signUp, login, updateUser };
+const getUserOrders = (req, res) => {
+  try {
+    const userId = req.user.userId;
+    UserServices.getUserOrders(userId)
+    .then(user => {
+      return res.status(200).json({user})
+    })
+    .catch(error => {
+      const msg = `Unable to get user orders ${error}`
+      return res.status(400).json({error: msg})
+    })
+  } catch (error) {
+    const msg = `Error getting user orders ${error}`;
+    return res.status(400).json({ error: msg });
+  }
+}
+
+module.exports = { signUp, login, updateUser, getUserOrders };
