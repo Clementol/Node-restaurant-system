@@ -1,4 +1,3 @@
-const {Sequelize, Op} = require("sequelize")
 const AuthHelper = require("../helpers/auth.helper");
 const {User, Order, Food, Order_Items, Vendor} = require("../models");
 
@@ -102,7 +101,6 @@ const getUserOrders = (userId) => {
           include: [{model: Food, as: "food"}]
         },
       ], 
-      // attributes: [Sequelize.fn("COUNT", Sequelize.col("orderId", "count"))]
   
     })
     .then((user) => resolve(user))

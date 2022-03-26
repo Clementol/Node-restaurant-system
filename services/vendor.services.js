@@ -1,6 +1,6 @@
 // import { updateUser } from "../controllers/user.controllers";
 // import AuthHelper from "../helpers/auth.helper";
-const {Vendor} = require("../models");
+const {Vendor, Order, Order_Items, Food} = require("../models");
 
 /**
  * @description Create Vendor
@@ -27,4 +27,25 @@ const UpdateVendor = (vendorId, data) => {
   });
 };
 
-module.exports = { CreateVendor, UpdateVendor };
+/**
+ * 
+ * @param {*} vendorId 
+ * @description Get vendor orders 
+ */
+const getVendorOrders = (vendorId) => {
+  const attr = ["userId", "firstName", "lastName"]
+  return new Promise((resolve, reject) => {
+    Order.findAll({where: {vendorId: vendorId}, 
+      include: [
+        {model: Order_Items, as: "orderItems",
+          include: [{model: Food, as: "food"}]
+        },
+      ], 
+  
+    })
+    .then((vendor) => resolve(vendor))
+    .catch(error => reject(error))
+  })
+}
+
+module.exports = { CreateVendor, UpdateVendor, getVendorOrders };

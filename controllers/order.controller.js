@@ -41,21 +41,16 @@ const createOrder = async (req, res) => {
       .then(orderItems => {
         return res.status(201).json({order, orderItems})
       })
+      .catch(error => {
+        const msg = `Unable to create order items ${error}`
+        return res.status(400).json({error: msg})
+      })
     })
     .catch(error => {
       const msg = `Unable to create order ${error}`
       return res.status(400).json({error: msg})
     })
-    // await Promise.all([
-      //   OrderServices.createOrder(orderData),
-    //   OrderServices.createOrderItems(orderDataItems),
-    // ]).then(order => {
-    //   return res.status(201).json({order})
-    // })
-    // .catch(error => {
-    //   const msg = `Unable to create order ${error}`
-    //   return res.status(400).json({error: msg})
-    // })
+
   } catch (error) {
     const msg = `Error creating order ${error}`;
     return res.status(500).json({ error: msg });

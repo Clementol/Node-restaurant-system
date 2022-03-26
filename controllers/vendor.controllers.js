@@ -39,7 +39,7 @@ const createVendor = (req, res) => {
   }
 };
 
-const updateVendor = (req, res) => {
+const updateVendor = async (req, res) => {
   try {
     const {
       name,
@@ -101,4 +101,21 @@ const updateVendor = (req, res) => {
   }
 };
 
-module.exports = { createVendor, updateVendor };
+const getVendorOrders = async (req, res) => {
+  try {
+    const {vendorId} = req.params
+    await VendorServices.getVendorOrders(vendorId)
+    .then(vendor => {
+      return res.status(200).json({vendor})
+    })
+    .catch(error => {
+      const msg = `Unable to get vendor orders ${error}`
+      return res.status(400).json({error: msg})
+    })
+  } catch (error) {
+    const msg = `Error getting vendor order ${error}`;
+    return res.status(500).json({ error: msg });
+  }
+}
+
+module.exports = { createVendor, updateVendor, getVendorOrders };
