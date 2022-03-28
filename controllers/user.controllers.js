@@ -41,7 +41,10 @@ const signUp = (req, res) => {
           }
         });
       }
-    });
+    }).catch(error => {
+      const msg = `Unable to check for user ${error}`
+      return res.status(400).json({error: msg})
+    })
   } catch (error) {
     // const {error: {errors}} = error
     return res.status(400).json({ error });
@@ -83,7 +86,10 @@ const login = async (req, res) => {
           }
         });
       }
-    });
+    }).catch(error => {
+      const msg = `Unable to check for user ${error}`
+      return res.status(400).json({error: msg})
+    })
   } catch (error) {
     const msg = `Error loging in ${error}`;
     return res.status(400).json({ error: msg });

@@ -39,14 +39,40 @@ module.exports = (sequelize, DataTypes) => {
     paymentStatus: {
       type: DataTypes.ENUM("PENDING", "PAID"),
       defaultValue: "PENDING",
+      validate: {
+        customValidator(value) {
+          if (value !== "PENDING" || value !== "PAID") {
+            throw new Error("either be [PENDING|PAID] ");
+          }
+        }
+      }
     },
     paymentMethod: {
       type: DataTypes.ENUM("CARD", "CASH", ""),
       defaultValue: "",
+      validate: {
+        customValidator(value) {
+          if (value !== "CARD" || value !== "CASH" || value !== "") {
+            throw new Error("either be [CARD|CASH|'']");
+          }
+        }
+      }
     },
     orderStatus: {
       type: DataTypes.ENUM("ORDERED", "COMING", "DELIVERED"),
       defaultValue: "ORDERED",
+      validate: {
+        isIn: {
+          args: [["ORDERED", "COMING", "DELIVERED"]],
+          msg: "either be [ORDERED|COMING|DELIVERED]"
+        },
+        // customValidator(value) {
+        //   console.log(value)
+        //   if (value != "ORDERED" || value != "COMING" || value != "DELIVERED") {
+        //     throw new Error("either be [ORDERED|COMING|DELIVERED] ");
+        //   }
+        // }
+      }
     },
   }, {
     timestamps: true,

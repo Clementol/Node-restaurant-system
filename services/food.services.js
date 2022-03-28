@@ -1,16 +1,6 @@
 const {Food} = require("../models");
 
-// MenuFoodAssociation(menuData) {
-//   return new Promise(async (resolve, reject) => {
-//     await Menu_Foods.create(menuData)
-//       .then(() => {
-//         resolve();
-//       })
-//       .catch((error) => {
-//         reject(error);
-//       });
-//   });
-// }
+
 /**
  * @description Create Food
  * @param {*} data

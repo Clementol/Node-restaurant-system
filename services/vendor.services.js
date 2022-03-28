@@ -33,7 +33,7 @@ const UpdateVendor = (vendorId, data) => {
  * @description Get vendor orders 
  */
 const getVendorOrders = (vendorId) => {
-  const attr = ["userId", "firstName", "lastName"]
+ 
   return new Promise((resolve, reject) => {
     Order.findAll({where: {vendorId: vendorId}, 
       include: [
@@ -48,4 +48,27 @@ const getVendorOrders = (vendorId) => {
   })
 }
 
-module.exports = { CreateVendor, UpdateVendor, getVendorOrders };
+/**
+ * 
+ * @param {*} vendorId 
+ * @param {*} orderIds 
+ * @param {*} orderStatus 
+ * @description Update vendor orders 
+ */
+const updateVendorOrders = (vendorId, orderIds, orderStatus) => {
+  return new Promise((resolve, reject) => {
+    Order.update({orderStatus}, {
+      where: {
+        orderId: orderIds,
+        vendorId: vendorId,
+      }
+    })
+    .then(order => {
+      resolve(order)
+    })
+    .catch(error => {
+      reject(error)
+    })
+  })
+}
+module.exports = { CreateVendor, UpdateVendor, getVendorOrders, updateVendorOrders };
