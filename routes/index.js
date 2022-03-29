@@ -11,7 +11,7 @@ module.exports = (app) => {
     app.use(v1, vendorRouter)
     app.use(v1, menuRouter)
     app.use(v1, foodRouter)
-    app.user(v1, cartRouter)
+    app.use(v1, cartRouter)
     app.use(v1, orderRouter)
 
 }

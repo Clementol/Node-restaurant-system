@@ -2,16 +2,16 @@ const { ObjectId } = require("mongodb");
 const CartServices = require("../services/cart.services");
 
 const addToCart = async (req, res) => {
-  let msg, data;
   try {
+    let msg, data;
     const { userId } = req.user;
     const {
       cartItems: { foodId, quantity },
     } = req.body;
-
     await CartServices.checkUserCart(userId)
       .then((userCartExist) => {
-        if (userCartExist) {
+        if (userCartExist != null) {
+          console.log("here");
           const { cartId } = userCartExist;
           CartServices.checkCartItem(cartId, foodId)
             .then((cartItemExist) => {
@@ -25,7 +25,7 @@ const addToCart = async (req, res) => {
                     return res.status(400).json({ error: msg });
                   });
               } else {
-                //add item to cart
+                //add new item to cart
                 const cartItemId = ObjectId().toString();
                 data.cartItemId = cartItemId;
                 data.cartId = cartId;
@@ -45,36 +45,39 @@ const addToCart = async (req, res) => {
               msg = `Unable to check to user's cart item ${error}`;
               return res.status(400).json({ error: msg });
             });
+        } else if (userCartExist == null) {
+          // create new cart
+          const cartId = ObjectId().toString();
+          data.cartId = cartId;
+          data.userId = userId;
+          console.log(data);
+          CartServices.createNewCart(data)
+            .then((newUserCart) => {
+              if (newUserCart) {
+                const { cartId } = newUserCart;
+                const cartItemId = ObjectId().toString();
+                data.cartItemId = cartItemId;
+                data.cartId = cartId;
+                data.foodId = foodId;
+                data.quantity = quantity;
+                CartServices.addItemToCart(data)
+                  .then((cartItem) => {
+                    return res.status(202).json({ cartItem });
+                  })
+                  .catch((error) => {
+                    msg = `Unable to add item to user cart ${error}`;
+                    return res.status(400).json({ error: msg });
+                  });
+              }
+            })
+            .catch((error) => {
+              msg = `Unable to create new cart ${error}`;
+              return res.status(400).json({ error: msg });
+            });
         }
-        // create new cart
-        const cartId = ObjectId().toString();
-        data.cartId = cartId;
-        data.userId = userId;
-        CartServices.createNewCart(data).then((newUserCart) => {
-          if (newUserCart) {
-              const {cartId} = newUserCart
-            const cartItemId = ObjectId().toString();
-            data.cartItemId = cartItemId;
-            data.cartId = cartId;
-            data.foodId = foodId;
-            data.quantity = quantity;
-            CartServices.addItemToCart(data)
-              .then((cartItem) => {
-                return res.status(202).json({ cartItem });
-              })
-              .catch((error) => {
-                msg = `Unable to add item to user cart ${error}`;
-                return res.status(400).json({ error: msg });
-              });
-          }
-        })
-        .catch((error) => {
-            msg = `Unable to create new cart ${error}`;
-            return res.status(400).json({ error: msg });
-          });
       })
       .catch((error) => {
-        msg = `Unable to check to user's cart ${error}`;
+        msg = `Unable to check user's cart ${error}`;
         return res.status(400).json({ error: msg });
       });
   } catch (error) {
@@ -83,4 +86,4 @@ const addToCart = async (req, res) => {
   }
 };
 
-module.exports = {addToCart}
+module.exports = { addToCart };

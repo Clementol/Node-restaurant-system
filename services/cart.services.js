@@ -9,10 +9,18 @@ const checkUserCart = (userId) => {
   return new Promise((resolve, reject) => {
     Cart.findOne({ where: { userId: userId } })
       .then((cart) => {
-        resolve(cart);
+     
+        if (cart != null) {
+          resolve(cart);
+        }else {
+    
+          resolve(cart)
+        }
+
       })
       .catch((error) => {
         reject(error);
+       
       });
   });
 };
