@@ -9,18 +9,14 @@ const checkUserCart = (userId) => {
   return new Promise((resolve, reject) => {
     Cart.findOne({ where: { userId: userId } })
       .then((cart) => {
-     
         if (cart != null) {
           resolve(cart);
-        }else {
-    
-          resolve(cart)
+        } else {
+          resolve(cart);
         }
-
       })
       .catch((error) => {
         reject(error);
-       
       });
   });
 };
@@ -52,9 +48,10 @@ const checkCartItem = (cartId, foodId) => {
  */
 const updateCartItem = (cartId, foodId, quantity) => {
   return new Promise((resolve, reject) => {
-    Cart_Items.increment("quantity",  {by: quantity,
-      where: { cartId: cartId, foodId: foodId } }
-    )
+    Cart_Items.increment("quantity", {
+      by: quantity,
+      where: { cartId: cartId, foodId: foodId },
+    })
       .then((updatedCartItem) => {
         resolve(updatedCartItem);
       })
@@ -97,7 +94,40 @@ const createNewCart = (data) => {
   });
 };
 
-const addToCart = () => {};
+/**
+ *
+ * @param {*} cartId
+ * @description Get user cart items
+ */
+const getUserCart = (cartId) => {
+  return new Promise((resolve, reject) => {
+    Cart_Items.findAll({ where: { cartId: cartId } })
+      .then((cartItems) => {
+        resolve(cartItems);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+/**
+ *
+ * @param {*} cartId
+ * @param {*} foodId
+ * @description Remove item from cart
+ */
+const removeCartItem = (cartId, foodId) => {
+  return new Promise((resolve, reject) => {
+    Cart_Items.destroy({ where: { cartId: cartId, foodId: foodId } })
+      .then((item) => {
+        resolve(item);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 
 module.exports = {
   checkUserCart,
@@ -105,4 +135,6 @@ module.exports = {
   updateCartItem,
   addItemToCart,
   createNewCart,
+  getUserCart,
+  removeCartItem,
 };
